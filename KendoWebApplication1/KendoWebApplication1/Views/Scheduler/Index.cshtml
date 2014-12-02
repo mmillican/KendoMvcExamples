@@ -1,0 +1,20 @@
+﻿@using KendoWebApplication1.Models.Scheduler
+@model SchedulerViewModel
+@{
+    ViewBag.Title = "Scheduler Example";
+}
+
+@(Html.Kendo().Scheduler<TaskViewModel>()
+          .Name("scheduler-demo").Name("scheduler")
+        .Views(views =>
+        {
+            views.DayView();
+            views.WorkWeekView();
+            views.WeekView();
+            views.MonthView(mv => mv.Selected(true));
+            views.AgendaView();
+        })
+        .Timezone("Etc/UTC")
+        .DataSource(d => d
+            .Read("GetData", "Scheduler")
+        ))
