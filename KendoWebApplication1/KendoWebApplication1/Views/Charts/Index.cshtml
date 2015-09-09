@@ -1,0 +1,33 @@
+﻿@using KendoWebApplication1.Models.Charts
+
+@{
+    ViewBag.Title = "Charts Example";
+}
+
+@(Html.Kendo().Chart<CallByCountry>()
+      .Name("CallByCountry")
+      .ChartArea(chartArea => chartArea
+          .Background("transparent")
+      )
+      .DataSource(dataSource => dataSource
+          .Read(read => read.Action("CallsByCountry", "Charts"))
+          .Group(group => { group.Add(model => model.Country); })
+          .Sort(sort => sort.Add(model => new {model.Date}).Ascending())
+      )
+      .Series(series =>
+      {
+          series.Line(model => model.CallsCount)
+              .Name("#= group.value #");
+      })
+      .Legend(legend => legend
+          .Position(ChartLegendPosition.Bottom)
+      )
+      .ValueAxis(axis => axis.Numeric().Labels(l => l.Format("{0:n0}")).MajorUnit(1))
+      .CategoryAxis(axis => axis
+          .Categories(model => model.Date)
+          .Date().BaseUnit(ChartAxisBaseUnit.Months)
+          .Labels(lbl => lbl.Format("{0:MM/yyyy}"))
+      )
+      .Tooltip(tooltip => tooltip
+          .Visible(true)
+          .Template("#= series.name #: #= value #")))
